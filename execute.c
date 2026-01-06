@@ -25,3 +25,22 @@ int is_builtin(char **argv)
 	return (0);
 }
 
+/**
+ * run_builtin - executes a builtin command
+ * @argv: arguments array
+ *
+ * Return: void
+ */
+void run_builtin(char **argv)
+{
+	if (_strcmp(argv[0], "exit") == 0)
+		exitt(argv);
+	else if (_strcmp(argv[0], "env") == 0)
+		env(argv);
+	else if (_strcmp(argv[0], "cd") == 0)
+		cd(argv);
+	else if (_strcmp(argv[0], "setenv") == 0)
+		_setenv(argv);
+	else if (_strcmp(argv[0], "unsetenv") == 0)
+		_unsetenv(argv);
+}
