@@ -42,4 +42,33 @@ list_path *add_node_end(list_path **head, char *str)
 	return (new);
 }
 
+/**
+ * linkpath - builds a linked list of PATH directories
+ * @path: PATH value
+ *
+ * Return: pointer to the head of the list, or NULL
+ */
+list_path *linkpath(char *path)
+{
+	list_path *head;
+	char *token;
+	char *tmp;
 
+	if (path == NULL)
+		return (NULL);
+
+	head = NULL;
+	tmp = _strdup(path);
+	if (tmp == NULL)
+		return (NULL);
+
+	token = strtok(tmp, ":");
+	while (token != NULL)
+	{
+		add_node_end(&head, token);
+		token = strtok(NULL, ":");
+	}
+	free(tmp);
+
+	return (head);
+}
