@@ -51,3 +51,32 @@ int _strncmp(char *s1, const char *s2, int n)
 
 	return (s1[i] - s2[i]);
 }
+
+/**
+ * _strcat - concatenates two strings
+ * @dest: destination buffer
+ * @src: source string
+ *
+ * Return: pointer to dest
+ */
+char *_strcat(char *dest, char *src)
+{
+	int i = 0;
+	int j = 0;
+
+	if (dest == NULL || src == NULL)
+		return (dest);
+
+	while (dest[i] != '\0')
+		i++;
+
+	while (src[j] != '\0')
+	{
+		dest[i + j] = src[j];
+		j++;
+	}
+
+	dest[i + j] = '\0';
+
+	return (dest);
+}
