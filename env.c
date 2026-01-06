@@ -79,3 +79,36 @@ void _setenv(char **arv)
 	environ[i] = new;
 	environ[i + 1] = NULL;
 }
+
+/**
+ * _unsetenv - removes an environment variable
+ * @arv: arguments
+ *
+ * Return: void
+ */
+void _unsetenv(char **arv)
+{
+	int i = 0;
+	int j;
+	int len;
+
+	if (arv[1] == NULL)
+		return;
+
+	len = _strlen(arv[1]);
+	while (environ[i] != NULL)
+	{
+		if (_strncmp(environ[i], arv[1], len) == 0 &&
+		    environ[i][len] == '=')
+		{
+			j = i;
+			while (environ[j] != NULL)
+			{
+				environ[j] = environ[j + 1];
+				j++;
+			}
+			return;
+		}
+		i++;
+	}
+}
