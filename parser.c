@@ -51,3 +51,23 @@ char **splitstring(char *str, const char *delim)
 	return (argv);
 }
 
+/**
+ * freearv - frees an array of strings
+ * @arv: array to free
+ *
+ * Return: void
+ */
+void freearv(char **arv)
+{
+	int i = 0;
+
+	if (arv == NULL)
+		return;
+
+	while (arv[i] != NULL)
+	{
+		free(arv[i]);
+		i++;
+	}
+	free(arv);
+}
