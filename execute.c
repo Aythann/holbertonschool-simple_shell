@@ -98,3 +98,26 @@ int exec_path(char **argv)
 
 	return (0);
 }
+
+/**
+ * execute - executes a command
+ * @argv: arguments array
+ *
+ * Return: 0 on success, -1 on failure
+ */
+int execute(char **argv)
+{
+	if (argv == NULL || argv[0] == NULL)
+		return (0);
+
+	if (is_builtin(argv))
+	{
+		run_builtin(argv);
+		return (0);
+	}
+
+	if (exec_direct(argv) == 0)
+		return (0);
+
+	return (exec_path(argv));
+}
