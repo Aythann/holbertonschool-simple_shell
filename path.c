@@ -108,3 +108,22 @@ char *_which(char *filename, list_path *head)
 	}
 	return (NULL);
 }
+
+/**
+ * free_list - frees a linked list of PATH directories
+ * @head: pointer to the head of the list
+ *
+ * Return: void
+ */
+void free_list(list_path *head)
+{
+	list_path *tmp;
+
+	while (head != NULL)
+	{
+		tmp = head;
+		head = head->next;
+		free(tmp->dir);
+		free(tmp);
+	}
+}
