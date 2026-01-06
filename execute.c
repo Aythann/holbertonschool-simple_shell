@@ -44,3 +44,57 @@ void run_builtin(char **argv)
 	else if (_strcmp(argv[0], "unsetenv") == 0)
 		_unsetenv(argv);
 }
+
+/**
+ * exec_direct - executes a command using direct path
+ * @argv: arguments array
+ *
+ * Return: 0 on success, -1 otherwise
+ */
+int exec_direct(char **argv)
+{
+	pid_t pid;
+
+	if (access(argv[0], X_OK) != 0)
+		return (-1);
+
+	pid = fork();
+	if (pid == 0)
+		execve(argv[0], argv, environ);
+
+	wait(NULL);
+	return (0);
+}
+
+/**
+ * exec_path - executes a command using PATH
+ * @argv: arguments array
+ *
+ * Return: 0 on success, -1 on failure
+ */
+int exec_path(char **argv)
+{
+	pid_t pid;
+	char *path;
+	list_path *plist;
+
+	path = _getenv("PATH");
+	plist = linkpath(path);
+	path = _which(argv[0], plist);
+	free_list(plist);
+
+	if (path == NULL)
+	{
+		_puts("hsh: command not found\n");
+		return (-1);
+	}
+
+	pid = fork();
+	if (pid == 0)
+		execve(path, argv, environ);
+
+	wait(NULL);
+	free(path);
+
+	return (0);
+}
