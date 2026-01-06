@@ -28,3 +28,22 @@ char *_getenv(const char *name)
 	return (NULL);
 }
 
+/**
+ * env - prints the current environment
+ * @arv: arguments (unused)
+ *
+ * Return: void
+ */
+void env(char **arv)
+{
+	int i = 0;
+
+	(void)arv;
+
+	while (environ[i] != NULL)
+	{
+		_puts(environ[i]);
+		_putchar('\n');
+		i++;
+	}
+}
