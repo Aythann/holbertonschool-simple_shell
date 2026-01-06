@@ -80,3 +80,32 @@ char *_strcat(char *dest, char *src)
 
 	return (dest);
 }
+
+/**
+ * concat_all - concatenates name, separator and value
+ * @name: first string
+ * @sep: separator string
+ * @value: value string
+ *
+ * Return: newly allocated string or NULL on failure
+ */
+char *concat_all(char *name, char *sep, char *value)
+{
+	char *new;
+	int len;
+
+	if (name == NULL || sep == NULL || value == NULL)
+		return (NULL);
+
+	len = _strlen(name) + _strlen(sep) + _strlen(value) + 1;
+	new = malloc(sizeof(char) * len);
+	if (new == NULL)
+		return (NULL);
+
+	new[0] = '\0';
+	_strcat(new, name);
+	_strcat(new, sep);
+	_strcat(new, value);
+
+	return (new);
+}
