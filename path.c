@@ -72,3 +72,39 @@ list_path *linkpath(char *path)
 
 	return (head);
 }
+
+/**
+ * _which - finds a command in the PATH
+ * @filename: command to find
+ * @head: linked list of PATH directories
+ *
+ * Return: full path to the command, or NULL if not found
+ */
+char *_which(char *filename, list_path *head)
+{
+	char *full;
+	int len;
+
+	if (filename == NULL || head == NULL)
+		return (NULL);
+
+	while (head != NULL)
+	{
+		len = _strlen(head->dir) + _strlen(filename) + 2;
+		full = malloc(sizeof(char) * len);
+		if (full == NULL)
+			return (NULL);
+
+		full[0] = '\0';
+		_strcat(full, head->dir);
+		_strcat(full, "/");
+		_strcat(full, filename);
+
+		if (access(full, X_OK) == 0)
+			return (full);
+
+		free(full);
+		head = head->next;
+	}
+	return (NULL);
+}
