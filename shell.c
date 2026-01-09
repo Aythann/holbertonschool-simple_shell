@@ -32,7 +32,7 @@ int main(int ac, char **av)
 		if (nread == -1)
 			break;
 
-		argv = splitstring(line, " \n\t");
+		argv = splitstring(line, " \n\t\r");
 		if (argv != NULL && argv[0] != NULL)
 			execute(argv);
 
