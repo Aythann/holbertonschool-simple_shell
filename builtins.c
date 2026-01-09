@@ -9,8 +9,9 @@
 void exitt(char **arv)
 {
 	(void)arv;
-	g_exit = 1;
+	exit(0);
 }
+
 
 /**
  * cd - changes the current directory
