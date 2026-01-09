@@ -10,6 +10,7 @@
 
 /* ========== global ========== */
 extern char **environ;
+extern int g_exit;
 
 /* ========== utils.c ========== */
 int _putchar(char c);
