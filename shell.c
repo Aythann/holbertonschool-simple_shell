@@ -5,7 +5,7 @@
  * @ac: argument count
  * @av: argument vector
  *
- * Return: status
+ * Return: 0 on success
  */
 int main(int ac, char **av)
 {
@@ -25,7 +25,7 @@ int main(int ac, char **av)
 
 	while (1)
 	{
-		if (interactive)
+		if (interactive != 0)
 			_puts("($) ");
 
 		nread = getline(&line, &len, stdin);
@@ -33,12 +33,15 @@ int main(int ac, char **av)
 			break;
 
 		argv = splitstring(line, " \n\t\r");
-		if (argv && argv[0])
+		if (argv != NULL && argv[0] != NULL)
 			execute(argv);
 
 		freearv(argv);
 		argv = NULL;
 	}
+
+	if (interactive != 0)
+		_putchar('\n');
 
 	free(line);
 	return (0);

@@ -70,7 +70,7 @@ int exec_direct(char **argv)
  * exec_path - executes a command using PATH
  * @argv: arguments array
  *
- * Return: 0 on success, 127 if not found
+ * Return: 0 on success, -1 on failure
  */
 int exec_path(char **argv)
 {
@@ -86,7 +86,7 @@ int exec_path(char **argv)
 	if (path == NULL)
 	{
 		_puts("hsh: command not found\n");
-		return (127);
+		return (-1);
 	}
 
 	pid = fork();
@@ -103,12 +103,10 @@ int exec_path(char **argv)
  * execute - executes a command
  * @argv: arguments array
  *
- * Return: status code
+ * Return: 0 on success, -1 on failure
  */
 int execute(char **argv)
 {
-	int status;
-
 	if (argv == NULL || argv[0] == NULL)
 		return (0);
 
@@ -121,9 +119,5 @@ int execute(char **argv)
 	if (exec_direct(argv) == 0)
 		return (0);
 
-	status = exec_path(argv);
-	if (status == 127)
-		return (127);
-
-	return (0);
+	return (exec_path(argv));
 }
