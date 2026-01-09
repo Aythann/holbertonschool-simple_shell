@@ -1,0 +1,192 @@
+.TH HSH 1 "January 2026" "Simple Shell" "User Commands"
+.SH NAME
+hsh \- a simple UNIX command line interpreter
+.SH SYNOPSIS
+.B hsh
+.SH DESCRIPTION
+.B hsh
+is a simple shell written in C that executes commands read from standard input.
+It works in both interactive mode (prompt displayed) and non-interactive mode (input piped or redirected).
+
+The shell reads a line using
+.B getline(3),
+splits it into tokens (arguments), checks for built-in commands, and otherwise executes external commands by searching in the
+.B PATH
+environment variable or by using a direct path if provided.
+
+.SH INVOCATION
+Run the shell:
+.PP
+.nf
+./hsh
+.fi
+.PP
+Non-interactive usage:
+.PP
+.nf
+echo "ls -l" | ./hsh
+.fi
+
+.SH PROMPT
+When standard input is a terminal, the shell displays:
+.PP
+.nf
+($)
+.fi
+
+.SH COMMAND EXECUTION
+For each command line, the shell:
+.IP 1. 3
+Reads a line from standard input.
+.IP 2. 3
+Splits it into tokens separated by spaces, tabs, and newlines.
+.IP 3. 3
+If the first token matches a built-in, executes it in the current process.
+.IP 4. 3
+Otherwise, attempts to execute:
+.RS 3
+.IP \(bu 2
+a direct path (if the file is executable),
+.IP \(bu 2
+or searches for the command in the directories listed in
+.B PATH
+and executes it.
+.RE
+.IP 5. 3
+Creates a child process using
+.B fork(2)
+and runs the program using
+.B execve(2).
+The parent waits using
+.B wait(2)/waitpid(2).
+
+.SH BUILTINS
+.TP
+.B exit
+Exit the shell.
+.TP
+.B exit \fIstatus\fR
+Exit the shell with the integer status code
+.I status
+(using the custom
+.B _atoi
+conversion).
+.TP
+.B env
+Print the current environment, one variable per line.
+.TP
+.B cd
+Change the current directory to the value of
+.B HOME
+(if set). If HOME is not set, changes to
+.B /
+.TP
+.B cd \fIdirectory\fR
+Change the current directory to
+.I directory.
+If it fails, an error message is printed.
+.TP
+.B setenv \fINAME VALUE\fR
+Set or modify an environment variable
+.I NAME
+to
+.I VALUE.
+.TP
+.B unsetenv \fINAME\fR
+Remove the environment variable
+.I NAME
+from the environment.
+
+.SH ENVIRONMENT
+The shell uses the environment array
+.B environ
+and supports:
+.TP
+.B PATH
+List of directories searched for executable commands when a direct path is not provided.
+.TP
+.B HOME
+Used by the
+.B cd
+builtin when no directory argument is given.
+
+.SH RETURN VALUE
+On normal termination,
+.B hsh
+returns 0.
+Builtins may terminate the program (e.g.
+.B exit
+) or affect the shell process state (e.g.
+.B cd
+).
+
+.SH LIMITATIONS
+This shell is intentionally minimal and educational.
+Notable limitations may include (but are not limited to):
+.IP \(bu 2
+No advanced parsing (quotes, escapes, pipes, redirections).
+.IP \(bu 2
+No job control.
+.IP \(bu 2
+Error reporting is minimal compared to full-featured shells.
+
+.SH FILES
+.TP
+.I shell.h
+Header file containing function prototypes, structures, and includes.
+.TP
+.I main.c
+Main loop: prompt, getline, parsing, execution.
+.TP
+.I execute.c
+Execution logic, builtin dispatch, fork/exec.
+.TP
+.I builtins.c
+Implementation of builtins (exit, cd).
+.TP
+.I env.c
+Environment handling (env, setenv, unsetenv, getenv).
+.TP
+.I parser.c
+Tokenization and argv freeing.
+.TP
+.I path.c
+PATH parsing and command lookup.
+.TP
+.I utils.c
+Basic utilities (_puts, _strlen, _strdup, _atoi, _putchar).
+.TP
+.I string_utils.c
+String helpers (_strcmp, _strncmp, _strcat, concat_all).
+
+.SH EXAMPLES
+Interactive:
+.PP
+.nf
+$ ./hsh
+($) ls
+($) pwd
+($) cd /tmp
+($) env
+($) exit 2
+.fi
+.PP
+Non-interactive:
+.PP
+.nf
+$ echo "ls -l" | ./hsh
+.fi
+
+.SH SEE ALSO
+.BR sh (1),
+.BR bash (1),
+.BR execve (2),
+.BR fork (2),
+.BR wait (2),
+.BR getline (3)
+
+.SH AUTHORS
+Aythan Cristovao
+Killian Le Boulzec
+.SH BUGS
+Report issues and improvements through the project repository.
