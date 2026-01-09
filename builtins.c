@@ -8,15 +8,10 @@
  */
 void exitt(char **arv)
 {
-	if (arv[1] != NULL)
-	{
-		exit(_atoi(arv[1]));
-	}
-	else
-	{
-		exit(0);
-	}
+    (void)arv;
+    exit(0);
 }
+
 
 /**
  * cd - changes the current directory
