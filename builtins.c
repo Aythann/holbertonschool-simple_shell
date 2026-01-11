@@ -1,17 +1,16 @@
 #include "shell.h"
 
 /**
- * exitt - exits the shell
- * @arv: arguments (unused here)
+ * exitt - exits the shell (request exit)
+ * @arv: arguments (unused)
  *
  * Return: void
  */
 void exitt(char **arv)
 {
 	(void)arv;
-	exit(0);
+	g_exit = 1;
 }
-
 
 /**
  * cd - changes the current directory
