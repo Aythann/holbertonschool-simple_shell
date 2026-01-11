@@ -46,7 +46,7 @@ void run_builtin(char **argv)
 }
 
 /**
- * exec_direct - executes a command using direct path
+ * exec_direct - executes a command using direct path (only if contains '/')
  * @argv: arguments array
  *
  * Return: 0 on success, -1 otherwise
@@ -54,6 +54,16 @@ void run_builtin(char **argv)
 int exec_direct(char **argv)
 {
 	pid_t pid;
+	int i = 0;
+
+	while (argv[0][i] != '\0')
+	{
+		if (argv[0][i] == '/')
+			break;
+		i++;
+	}
+	if (argv[0][i] == '\0')
+		return (-1);
 
 	if (access(argv[0], X_OK) != 0)
 		return (-1);
@@ -79,6 +89,12 @@ int exec_path(char **argv)
 	list_path *plist;
 
 	path = _getenv("PATH");
+	if (path == NULL || path[0] == '\0')
+	{
+		print_not_found(argv[0]);
+		return (127);
+	}
+
 	plist = linkpath(path);
 	path = _which(argv[0], plist);
 	free_list(plist);
