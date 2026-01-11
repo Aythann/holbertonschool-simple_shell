@@ -122,8 +122,5 @@ int execute(char **argv)
 		return (0);
 
 	status = exec_path(argv);
-	if (status == 127)
-		return (127);
-
-	return (0);
+	return (status);
 }
