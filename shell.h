@@ -10,6 +10,7 @@
 
 /* ========== global ========== */
 extern char **environ;
+extern int g_exit;
 
 /* ========== utils.c ========== */
 int _putchar(char c);
@@ -17,6 +18,9 @@ void _puts(char *str);
 int _strlen(char *s);
 char *_strdup(char *str);
 int _atoi(char *s);
+
+/* ========== errors.c ========== */
+void print_not_found(char *cmd);
 
 /* ========== string_utils.c ========== */
 int _strcmp(char *s1, char *s2);
