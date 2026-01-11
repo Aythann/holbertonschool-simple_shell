@@ -84,38 +84,14 @@ char *_strdup(char *str)
 }
 
 /**
- * _atoi - converts a string to an integer
- * @s: string to convert
+ * print_not_found - prints "not found" error message to stderr
+ * @cmd: command name
  *
- * Return: converted integer value
+ * Return: void
  */
-int _atoi(char *s)
+void print_not_found(char *cmd)
 {
-	int i;
-	int sign;
-	int result;
-
-	if (s == NULL)
-		return (0);
-
-	i = 0;
-	sign = 1;
-	result = 0;
-
-	if (s[i] == '-')
-	{
-		sign = -1;
-		i++;
-	}
-
-	while (s[i] != '\0')
-	{
-		if (s[i] < '0' || s[i] > '9')
-			break;
-
-		result = result * 10 + (s[i] - '0');
-		i++;
-	}
-
-	return (result * sign);
+	write(2, "./hsh: 1: ", 10);
+	write(2, cmd, _strlen(cmd));
+	write(2, ": not found\n", 12);
 }
