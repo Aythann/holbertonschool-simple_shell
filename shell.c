@@ -5,7 +5,7 @@
  * @ac: argument count
  * @av: argument vector
  *
- * Return: 0 on success
+ * Return: 0 on success, or last status in non-interactive mode
  */
 int main(int ac, char **av)
 {
@@ -14,6 +14,7 @@ int main(int ac, char **av)
 	ssize_t nread;
 	char **argv;
 	int interactive;
+	int last_status;
 
 	(void)ac;
 	(void)av;
@@ -22,6 +23,7 @@ int main(int ac, char **av)
 	len = 0;
 	argv = NULL;
 	interactive = isatty(STDIN_FILENO);
+	last_status = 0;
 
 	while (1)
 	{
@@ -34,7 +36,7 @@ int main(int ac, char **av)
 
 		argv = splitstring(line, " \n\t\r");
 		if (argv != NULL && argv[0] != NULL)
-			execute(argv);
+			last_status = execute(argv);
 
 		freearv(argv);
 		argv = NULL;
@@ -47,5 +49,9 @@ int main(int ac, char **av)
 		_putchar('\n');
 
 	free(line);
+
+	if (interactive == 0)
+		return (last_status);
+
 	return (0);
 }
