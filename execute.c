@@ -49,11 +49,12 @@ void run_builtin(char **argv)
  * exec_direct - executes a command using direct path (only if contains '/')
  * @argv: arguments array
  *
- * Return: 0 on success, -1 otherwise
+ * Return: exit status on success, -1 if not a direct path or not executable
  */
 int exec_direct(char **argv)
 {
 	pid_t pid;
+	int status;
 	int i = 0;
 
 	while (argv[0][i] != '\0')
@@ -72,7 +73,12 @@ int exec_direct(char **argv)
 	if (pid == 0)
 		execve(argv[0], argv, environ);
 
-	wait(NULL);
+	if (wait(&status) == -1)
+		return (0);
+
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+
 	return (0);
 }
 
@@ -80,11 +86,12 @@ int exec_direct(char **argv)
  * exec_path - executes a command using PATH
  * @argv: arguments array
  *
- * Return: 0 on success, 127 if not found
+ * Return: exit status on success, 127 if not found
  */
 int exec_path(char **argv)
 {
 	pid_t pid;
+	int status;
 	char *path;
 	list_path *plist;
 
@@ -109,8 +116,13 @@ int exec_path(char **argv)
 	if (pid == 0)
 		execve(path, argv, environ);
 
-	wait(NULL);
 	free(path);
+
+	if (wait(&status) == -1)
+		return (0);
+
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
 
 	return (0);
 }
@@ -119,7 +131,7 @@ int exec_path(char **argv)
  * execute - executes a command
  * @argv: arguments array
  *
- * Return: status code (0 or 127)
+ * Return: status code
  */
 int execute(char **argv)
 {
@@ -130,13 +142,25 @@ int execute(char **argv)
 
 	if (is_builtin(argv))
 	{
+		if (_strcmp(argv[0], "exit") == 0)
+		{
+			run_builtin(argv);
+			return (g_status);
+		}
+
 		run_builtin(argv);
+		g_status = 0;
 		return (0);
 	}
 
-	if (exec_direct(argv) == 0)
-		return (0);
+	status = exec_direct(argv);
+	if (status != -1)
+	{
+		g_status = status;
+		return (status);
+	}
 
 	status = exec_path(argv);
+	g_status = status;
 	return (status);
 }
