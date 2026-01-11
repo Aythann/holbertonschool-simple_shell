@@ -38,9 +38,12 @@ int main(int ac, char **av)
 
 		freearv(argv);
 		argv = NULL;
+
+		if (g_exit)
+			break;
 	}
 
-	if (interactive != 0)
+	if (interactive != 0 && g_exit == 0)
 		_putchar('\n');
 
 	free(line);
