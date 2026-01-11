@@ -11,6 +11,7 @@
 /* ========== global ========== */
 extern char **environ;
 extern int g_exit;
+extern int g_status;
 
 /* ========== utils.c ========== */
 int _putchar(char c);

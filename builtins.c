@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * exitt - exits the shell (request exit)
+ * exitt - exits the shell
  * @arv: arguments (unused)
  *
  * Return: void
